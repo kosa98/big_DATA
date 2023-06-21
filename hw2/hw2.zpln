@@ -1,0 +1,1562 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%pyspark\nimport glob\nimport os\nfrom statistics import variance, stdev\nfrom pyspark.sql.functions import udf, concat_ws, avg as Sparkavg, col, unix_timestamp, from_unixtime, max as Sparkmax, window\nfrom pyspark.sql.types import FloatType, StructField, StructType, IntegerType, StringType, TimestampType\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:35:54+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687217826678_1918968467",
+      "id": "paragraph_1687217826678_1918968467",
+      "dateCreated": "2023-06-20T02:37:06+0300",
+      "dateStarted": "2023-06-21T07:36:14+0300",
+      "dateFinished": "2023-06-21T07:36:30+0300",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:186"
+    },
+    {
+      "text": "%md\nБлок 2. Работа с данными на Spark",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:36:30+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Блок 2. Работа с данными на Spark</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687226183552_641861964",
+      "id": "paragraph_1687226183552_641861964",
+      "dateCreated": "2023-06-20T04:56:23+0300",
+      "dateStarted": "2023-06-21T07:36:30+0300",
+      "dateFinished": "2023-06-21T07:36:30+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:187"
+    },
+    {
+      "text": "%md\n1) Преобразовать данные исходного датасета в parquet объединяя все таблицы.",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:36:30+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<ol>\n<li>Преобразовать данные исходного датасета в parquet объединяя все таблицы.</li>\n</ol>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687226303383_52660065",
+      "id": "paragraph_1687226303383_52660065",
+      "dateCreated": "2023-06-20T04:58:23+0300",
+      "dateStarted": "2023-06-21T07:36:30+0300",
+      "dateFinished": "2023-06-21T07:36:30+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:188"
+    },
+    {
+      "text": "%pyspark\n\nfiles_book = glob.glob('/home/kosa98/archive (1)/book*')\n\n\ndf_book = spark.read.csv(files_book[0], escape=\"\\\"\", multiLine=True, header=True, inferSchema=True)\n\nfor file in files_book[1:]:\n    \n    df_current = spark.read.csv(file, escape=\"\\\"\", multiLine=True,header=True, inferSchema=True)\n    df_book = df_book.unionByName(df_current, allowMissingColumns=True)\n    print(file)\n    \ndf_book = df_book.drop(\"Count of text reviews\")",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:36:30+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "/home/kosa98/archive (1)/book200k-300k.csv\n/home/kosa98/archive (1)/book1000k-1100k.csv\n/home/kosa98/archive (1)/book1800k-1900k.csv\n/home/kosa98/archive (1)/book100k-200k.csv\n/home/kosa98/archive (1)/book300k-400k.csv\n/home/kosa98/archive (1)/book1-100k.csv\n/home/kosa98/archive (1)/book600k-700k.csv\n/home/kosa98/archive (1)/book1300k-1400k.csv\n/home/kosa98/archive (1)/book500k-600k.csv\n/home/kosa98/archive (1)/book800k-900k.csv\n/home/kosa98/archive (1)/book1400k-1500k.csv\n/home/kosa98/archive (1)/book1700k-1800k.csv\n/home/kosa98/archive (1)/book2000k-3000k.csv\n/home/kosa98/archive (1)/book1900k-2000k.csv\n/home/kosa98/archive (1)/book1500k-1600k.csv\n/home/kosa98/archive (1)/book700k-800k.csv\n/home/kosa98/archive (1)/book3000k-4000k.csv\n/home/kosa98/archive (1)/book1200k-1300k.csv\n/home/kosa98/archive (1)/book4000k-5000k.csv\n/home/kosa98/archive (1)/book1600k-1700k.csv\n/home/kosa98/archive (1)/book400k-500k.csv\n/home/kosa98/archive (1)/book1100k-1200k.csv\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=6",
+              "$$hashKey": "object:1114"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=7",
+              "$$hashKey": "object:1115"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=8",
+              "$$hashKey": "object:1116"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=9",
+              "$$hashKey": "object:1117"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=10",
+              "$$hashKey": "object:1118"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=11",
+              "$$hashKey": "object:1119"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=12",
+              "$$hashKey": "object:1120"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=13",
+              "$$hashKey": "object:1121"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=14",
+              "$$hashKey": "object:1122"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=15",
+              "$$hashKey": "object:1123"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=16",
+              "$$hashKey": "object:1124"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=17",
+              "$$hashKey": "object:1125"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=18",
+              "$$hashKey": "object:1126"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=19",
+              "$$hashKey": "object:1127"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=20",
+              "$$hashKey": "object:1128"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=21",
+              "$$hashKey": "object:1129"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=22",
+              "$$hashKey": "object:1130"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=23",
+              "$$hashKey": "object:1131"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=24",
+              "$$hashKey": "object:1132"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=25",
+              "$$hashKey": "object:1133"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=26",
+              "$$hashKey": "object:1134"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=27",
+              "$$hashKey": "object:1135"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=28",
+              "$$hashKey": "object:1136"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=29",
+              "$$hashKey": "object:1137"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=30",
+              "$$hashKey": "object:1138"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=31",
+              "$$hashKey": "object:1139"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=32",
+              "$$hashKey": "object:1140"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=33",
+              "$$hashKey": "object:1141"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=34",
+              "$$hashKey": "object:1142"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=35",
+              "$$hashKey": "object:1143"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=36",
+              "$$hashKey": "object:1144"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=37",
+              "$$hashKey": "object:1145"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=38",
+              "$$hashKey": "object:1146"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=39",
+              "$$hashKey": "object:1147"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=40",
+              "$$hashKey": "object:1148"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=41",
+              "$$hashKey": "object:1149"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=42",
+              "$$hashKey": "object:1150"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=43",
+              "$$hashKey": "object:1151"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=44",
+              "$$hashKey": "object:1152"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=45",
+              "$$hashKey": "object:1153"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=46",
+              "$$hashKey": "object:1154"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=47",
+              "$$hashKey": "object:1155"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=48",
+              "$$hashKey": "object:1156"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=49",
+              "$$hashKey": "object:1157"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=50",
+              "$$hashKey": "object:1158"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=51",
+              "$$hashKey": "object:1159"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687222964555_76690707",
+      "id": "paragraph_1687222964555_76690707",
+      "dateCreated": "2023-06-20T04:02:44+0300",
+      "dateStarted": "2023-06-21T07:36:30+0300",
+      "dateFinished": "2023-06-21T07:37:02+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:189"
+    },
+    {
+      "text": "%pyspark\ndf_book.printSchema()\n\n\n\ndf_book.write.csv('/home/kosa98/archive (1)/BOOK_cvs', header=True)\ndf_book.write.parquet('/home/kosa98/archive (1)/BOOK_parquet')\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:37:02+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- Id: integer (nullable = true)\n |-- Name: string (nullable = true)\n |-- Authors: string (nullable = true)\n |-- ISBN: string (nullable = true)\n |-- Rating: double (nullable = true)\n |-- PublishYear: integer (nullable = true)\n |-- PublishMonth: integer (nullable = true)\n |-- PublishDay: integer (nullable = true)\n |-- Publisher: string (nullable = true)\n |-- RatingDist5: string (nullable = true)\n |-- RatingDist4: string (nullable = true)\n |-- RatingDist3: string (nullable = true)\n |-- RatingDist2: string (nullable = true)\n |-- RatingDist1: string (nullable = true)\n |-- RatingDistTotal: string (nullable = true)\n |-- CountsOfReview: integer (nullable = true)\n |-- Language: string (nullable = true)\n |-- pagesNumber: integer (nullable = true)\n |-- Description: string (nullable = true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=52",
+              "$$hashKey": "object:1385"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=53",
+              "$$hashKey": "object:1386"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687219769018_95115752",
+      "id": "paragraph_1687219769018_95115752",
+      "dateCreated": "2023-06-20T03:09:29+0300",
+      "dateStarted": "2023-06-21T07:37:02+0300",
+      "dateFinished": "2023-06-21T07:38:00+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:190"
+    },
+    {
+      "text": "%pyspark\ndf_book_cvs = 0\ndf_book = 0\ndf_book = spark.read.csv('/home/kosa98/archive (1)/BOOK_cvs', escape=\"\\\"\", multiLine=True, header=True, inferSchema=True)\ndf_book.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:00+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- Id: string (nullable = true)\n |-- Name: string (nullable = true)\n |-- Authors: string (nullable = true)\n |-- ISBN: string (nullable = true)\n |-- Rating: string (nullable = true)\n |-- PublishYear: string (nullable = true)\n |-- PublishMonth: string (nullable = true)\n |-- PublishDay: string (nullable = true)\n |-- Publisher: string (nullable = true)\n |-- RatingDist5: string (nullable = true)\n |-- RatingDist4: string (nullable = true)\n |-- RatingDist3: string (nullable = true)\n |-- RatingDist2: string (nullable = true)\n |-- RatingDist1: string (nullable = true)\n |-- RatingDistTotal: string (nullable = true)\n |-- CountsOfReview: string (nullable = true)\n |-- Language: string (nullable = true)\n |-- pagesNumber: string (nullable = true)\n |-- Description: string (nullable = true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=54",
+              "$$hashKey": "object:1436"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=55",
+              "$$hashKey": "object:1437"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687221913697_587203340",
+      "id": "paragraph_1687221913697_587203340",
+      "dateCreated": "2023-06-20T03:45:13+0300",
+      "dateStarted": "2023-06-21T07:38:00+0300",
+      "dateFinished": "2023-06-21T07:38:08+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:191"
+    },
+    {
+      "text": "%pyspark\ndf_book_parquet = 0\ndf_book = 0\ndf_book = spark.read.parquet('/home/kosa98/archive (1)/BOOK_parquet', header=True)\ndf_book.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:08+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- Id: integer (nullable = true)\n |-- Name: string (nullable = true)\n |-- Authors: string (nullable = true)\n |-- ISBN: string (nullable = true)\n |-- Rating: double (nullable = true)\n |-- PublishYear: integer (nullable = true)\n |-- PublishMonth: integer (nullable = true)\n |-- PublishDay: integer (nullable = true)\n |-- Publisher: string (nullable = true)\n |-- RatingDist5: string (nullable = true)\n |-- RatingDist4: string (nullable = true)\n |-- RatingDist3: string (nullable = true)\n |-- RatingDist2: string (nullable = true)\n |-- RatingDist1: string (nullable = true)\n |-- RatingDistTotal: string (nullable = true)\n |-- CountsOfReview: integer (nullable = true)\n |-- Language: string (nullable = true)\n |-- pagesNumber: integer (nullable = true)\n |-- Description: string (nullable = true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=56",
+              "$$hashKey": "object:1487"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687225749870_1588422740",
+      "id": "paragraph_1687225749870_1588422740",
+      "dateCreated": "2023-06-20T04:49:09+0300",
+      "dateStarted": "2023-06-21T07:38:08+0300",
+      "dateFinished": "2023-06-21T07:38:08+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:192"
+    },
+    {
+      "text": "%pyspark\n\ndef size_of_dir(path):\n    \n    files_of_dir = glob.glob(path)\n    \n    \n    size_ans = 0\n    for file in files_of_dir:\n\n        size_ans += os.path.getsize(file)\n    return size_ans\n    \n\nprint('Размер сумарно занимаемых cvs: ', size_of_dir('/home/kosa98/archive (1)/BOOK_cvs/*') / 1024 / 1024, 'MB')\nprint('Размер сумарно занимаемых parquet: ', size_of_dir('/home/kosa98/archive (1)/BOOK_parquet/*')/ 1024 / 1024, 'MB')\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:08+0300",
+      "progress": 10,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Размер сумарно занимаемых cvs:  1114.538109779358 MB\nРазмер сумарно занимаемых parquet:  668.871452331543 MB\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687225448245_106539981",
+      "id": "paragraph_1687225448245_106539981",
+      "dateCreated": "2023-06-20T04:44:08+0300",
+      "dateStarted": "2023-06-21T07:38:08+0300",
+      "dateFinished": "2023-06-21T07:38:08+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:193"
+    },
+    {
+      "text": "%md\nСкорость parquet на чтение сильно быстрее csv(0 vs 7 сек.), на больших данных разница будет существеней.\nА место занимаемое parquet на 40% меньше, чем занимаемое cvs",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:08+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Скорость parquet на чтение сильно быстрее csv(0 vs 7 сек.), на больших данных разница будет существеней.<br />\nА место занимаемое parquet на 40% меньше, чем занимаемое cvs</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687225913725_1925149853",
+      "id": "paragraph_1687225913725_1925149853",
+      "dateCreated": "2023-06-20T04:51:53+0300",
+      "dateStarted": "2023-06-21T07:38:08+0300",
+      "dateFinished": "2023-06-21T07:38:08+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:194"
+    },
+    {
+      "text": "%pyspark\n\ndf_book.printSchema()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:09+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- Id: integer (nullable = true)\n |-- Name: string (nullable = true)\n |-- Authors: string (nullable = true)\n |-- ISBN: string (nullable = true)\n |-- Rating: double (nullable = true)\n |-- PublishYear: integer (nullable = true)\n |-- PublishMonth: integer (nullable = true)\n |-- PublishDay: integer (nullable = true)\n |-- Publisher: string (nullable = true)\n |-- RatingDist5: string (nullable = true)\n |-- RatingDist4: string (nullable = true)\n |-- RatingDist3: string (nullable = true)\n |-- RatingDist2: string (nullable = true)\n |-- RatingDist1: string (nullable = true)\n |-- RatingDistTotal: string (nullable = true)\n |-- CountsOfReview: integer (nullable = true)\n |-- Language: string (nullable = true)\n |-- pagesNumber: integer (nullable = true)\n |-- Description: string (nullable = true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687228466362_2127899717",
+      "id": "paragraph_1687228466362_2127899717",
+      "dateCreated": "2023-06-20T05:34:26+0300",
+      "dateStarted": "2023-06-21T07:38:09+0300",
+      "dateFinished": "2023-06-21T07:38:09+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:195"
+    },
+    {
+      "text": "%md\n2) Используя весь набор данных с помощью Spark вывести",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:09+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<ol start=\"2\">\n<li>Используя весь набор данных с помощью Spark вывести</li>\n</ol>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687227312748_630490702",
+      "id": "paragraph_1687227312748_630490702",
+      "dateCreated": "2023-06-20T05:15:12+0300",
+      "dateStarted": "2023-06-21T07:38:09+0300",
+      "dateFinished": "2023-06-21T07:38:09+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:196"
+    },
+    {
+      "text": "%pyspark\n\ndef var_df(rating_comon):\n    ratings = [float(rating[2:]) for rating in rating_comon.split(\",\")]\n    \n    if (1 * (ratings[0]) + 1 * (ratings[1]) + 1 * (ratings[2]) + 1 * (ratings[3]) + 1 * (ratings[4])) == 0:\n        return 0\n        \n    ex2 = (1**2 * (ratings[0]) + 2**2 * (ratings[1]) + 3**2 * (ratings[2]) + 4**2 * (ratings[3]) + 5**2 * (ratings[4])) / (1 * (ratings[0]) + 1 * (ratings[1]) + 1 * (ratings[2]) + 1 * (ratings[3]) + 1 * (ratings[4]))\n    \n    ex = (1 * (ratings[0]) + 2 * (ratings[1]) + 3 * (ratings[2]) + 4 * (ratings[3]) + 5 * (ratings[4])) / (1 * (ratings[0]) + 1 * (ratings[1]) + 1 * (ratings[2]) + 1 * (ratings[3]) + 1 * (ratings[4]))\n    return ex2 - ex ** 2 \n\n\n\nvar_df_udf = udf(var_df, FloatType())\n\ndf_book = df_book.withColumn('var', var_df_udf(concat_ws(\",\", df_book.RatingDist1, df_book.RatingDist2, df_book.RatingDist3, df_book.RatingDist4, df_book.RatingDist5)))\n\n\n\ndef total_rating(rating):\n    return float(rating.split(':')[1])\n\n\n\ntotal_rating_df_udf = udf(total_rating, FloatType())\n\ndf_book = df_book.withColumn('total_rating', total_rating_df_udf(df_book.RatingDistTotal))\n\ndf_book.printSchema()\n\n#spark.sql(\"REFRESH TALE global_temp.book\")\n\ndf_book.createOrReplaceTempView(\"book\")\n\nspark.sql(\"select * from book limit 10\").show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:09+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "editorHide": false,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- Id: integer (nullable = true)\n |-- Name: string (nullable = true)\n |-- Authors: string (nullable = true)\n |-- ISBN: string (nullable = true)\n |-- Rating: double (nullable = true)\n |-- PublishYear: integer (nullable = true)\n |-- PublishMonth: integer (nullable = true)\n |-- PublishDay: integer (nullable = true)\n |-- Publisher: string (nullable = true)\n |-- RatingDist5: string (nullable = true)\n |-- RatingDist4: string (nullable = true)\n |-- RatingDist3: string (nullable = true)\n |-- RatingDist2: string (nullable = true)\n |-- RatingDist1: string (nullable = true)\n |-- RatingDistTotal: string (nullable = true)\n |-- CountsOfReview: integer (nullable = true)\n |-- Language: string (nullable = true)\n |-- pagesNumber: integer (nullable = true)\n |-- Description: string (nullable = true)\n |-- var: float (nullable = true)\n |-- total_rating: float (nullable = true)\n\n+-------+--------------------+------------------+----------+------+-----------+------------+----------+--------------------+-----------+-----------+-----------+-----------+-----------+---------------+--------------+--------+-----------+--------------------+----------+------------+\n|     Id|                Name|           Authors|      ISBN|Rating|PublishYear|PublishMonth|PublishDay|           Publisher|RatingDist5|RatingDist4|RatingDist3|RatingDist2|RatingDist1|RatingDistTotal|CountsOfReview|Language|pagesNumber|         Description|       var|total_rating|\n+-------+--------------------+------------------+----------+------+-----------+------------+----------+--------------------+-----------+-----------+-----------+-----------+-----------+---------------+--------------+--------+-----------+--------------------+----------+------------+\n|2000004|Geschichte der Pr...|Joseph Blenkinsopp|3170117742|  3.66|       1998|           8|         1|          Kohlhammer|       5:10|       4:24|       3:25|        2:3|        1:0|       total:62|             0|    null|        296|This revised and ...| 0.6433403|        62.0|\n|2000006|Josué et l'allian...|       Moshé Anbar|3631450184|   0.0|       1992|           6|         1|Peter Lang Gmbh, ...|        5:0|        4:0|        3:0|        2:0|        1:0|        total:0|             0|    null|        163|Jos 24:1-28 est u...|      null|         0.0|\n|2000012|The Essential Cho...|    Elinor Klivans|0811858049|  3.55|       2007|          12|        13|     Chronicle Books|        5:9|       4:12|       3:10|        2:5|        1:2|       total:38|             6|    null|        120|One of the greate...| 1.2998616|        38.0|\n|2000021|Fifty Fifty Tutti...|      Esther Menon|0435125370|   3.0|       2009|           9|         1|Heinemann Educati...|        5:0|        4:1|        3:7|        2:1|        1:0|        total:9|             0|    null|        199|This collection s...|0.22222222|         9.0|\n|2000024|  Let's Make Cookies|         Mary Hill|0516239589|   3.5|       2005|          12|         2|Children's Press(CT)|        5:0|        4:1|        3:1|        2:0|        1:0|        total:2|             0|    null|         24|Favorite foods ar...|      0.25|         2.0|\n|2000026|The Case for Pena...|    W. Gordon West|1551301474|  4.33|       2000|           5|         1|Canadian Scholars...|        5:1|        4:2|        3:0|        2:0|        1:0|        total:3|             1|    null|        362|This book marshal...|0.22222222|         3.0|\n|2000030|Cracking the GRE ...|     Deborah Guest|0375756159|   0.0|       2002|           9|        17|    Princeton Review|        5:0|        4:0|        3:0|        2:0|        1:0|        total:0|             0|    null|        352|The Princeton Rev...|      null|         0.0|\n|2000031|Daring to Draw Ne...|       John  White|0877847886|  4.18|       1977|          10|         1|           IVP Books|       5:99|       4:66|       3:33|        2:8|        1:4|      total:210|            17|    null|        162|Prayers are windo...| 0.9196372|       210.0|\n|2000032|Blondels Song: Th...|       David Boyle|067091486X|  3.87|       2005|           7|        26|              Viking|       5:27|       4:48|       3:31|        2:5|        1:0|      total:111|             2|    null|        320|On his way back f...| 0.6867949|       111.0|\n|2000034|Richard Lionheart...|     John Matthews|1853140074|  2.67|       1988|           8|        31| Firebird Books Ltd.|        5:0|        4:0|        3:2|        2:1|        1:0|        total:3|             0|    null|         52|                null|0.22222222|         3.0|\n+-------+--------------------+------------------+----------+------+-----------+------------+----------+--------------------+-----------+-----------+-----------+-----------+-----------+---------------+--------------+--------+-----------+--------------------+----------+------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=57",
+              "$$hashKey": "object:1693"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=58",
+              "$$hashKey": "object:1694"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687227908091_1327526519",
+      "id": "paragraph_1687227908091_1327526519",
+      "dateCreated": "2023-06-20T05:25:08+0300",
+      "dateStarted": "2023-06-21T07:38:09+0300",
+      "dateFinished": "2023-06-21T07:38:16+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:197"
+    },
+    {
+      "text": "%pyspark\n\nscript = '''\n\n \nSELECT Id, Name,  int(CountsOfReview)\nFROM book \norder by  int(CountsOfReview) desc\nlimit 10\n\n'''\n\n\nprint('a) Топ-10 книг с наибольшим числом ревью')\nspark.sql(script).show()\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:16+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "a) Топ-10 книг с наибольшим числом ревью\n+-------+--------------------+--------------+\n|     Id|                Name|CountsOfReview|\n+-------+--------------------+--------------+\n|2767052|The Hunger Games ...|        154447|\n|  41865|Twilight (Twiligh...|         94850|\n|  19063|      The Book Thief|         87685|\n|4667024|            The Help|         76040|\n|      3|Harry Potter and ...|         75911|\n|   3636|The Giver (The Gi...|         57034|\n|  43641| Water for Elephants|         52918|\n|2429135|The Girl with the...|         52225|\n| 136251|Harry Potter and ...|         52088|\n|  28187|The Lightning Thi...|         48630|\n+-------+--------------------+--------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=59",
+              "$$hashKey": "object:1744"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687227435898_1060124773",
+      "id": "paragraph_1687227435898_1060124773",
+      "dateCreated": "2023-06-20T05:17:15+0300",
+      "dateStarted": "2023-06-21T07:38:16+0300",
+      "dateFinished": "2023-06-21T07:38:19+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:198"
+    },
+    {
+      "text": "%pyspark\n\nscript = '''\n\nselect *\nfrom (\nSELECT Publisher,  avg(pagesNumber) as avg_pagesNumber\nFROM book \ngroup by Publisher\n)\n\norder by  avg_pagesNumber desc\nlimit 10\n\n'''\n\n\nprint('b) Топ-10 издателей с наибольшим средним числом страниц в книгах')\nspark.sql(script).show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:19+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "b) Топ-10 издателей с наибольшим средним числом страниц в книгах\n+--------------------+------------------+\n|           Publisher|   avg_pagesNumber|\n+--------------------+------------------+\n|Crafty Secrets Pu...|         1807321.6|\n|    Sacred-texts.com|          500000.0|\n|Department of Rus...| 322128.5714285714|\n|Logos Research Sy...|          100000.0|\n|Encyclopedia Brit...|           32642.0|\n|Progressive Manag...|        19106.3625|\n|Still Waters Revi...|10080.142857142857|\n|P. Shalom Publica...|            8539.0|\n|Hendrickson Publi...|            6448.0|\n|            IEEE/EMB|            6000.0|\n+--------------------+------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=60",
+              "$$hashKey": "object:1790"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=61",
+              "$$hashKey": "object:1791"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687227636328_974619990",
+      "id": "paragraph_1687227636328_974619990",
+      "dateCreated": "2023-06-20T05:20:36+0300",
+      "dateStarted": "2023-06-21T07:38:19+0300",
+      "dateFinished": "2023-06-21T07:38:23+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:199"
+    },
+    {
+      "text": "%pyspark\n\nscript = '''\n\nselect *\nfrom (\nSELECT PublishYear,  sum(1) as cnt_books_of_year\nFROM book \ngroup by PublishYear\n)\n\norder by  cnt_books_of_year desc\nlimit 10\n\n'''\n\nprint('c) Десять наиболее активных по числу изданных книг лет')\n\nspark.sql(script).show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:23+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "c) Десять наиболее активных по числу изданных книг лет\n+-----------+-----------------+\n|PublishYear|cnt_books_of_year|\n+-----------+-----------------+\n|       2007|           129507|\n|       2006|           122374|\n|       2005|           117639|\n|       2004|           105733|\n|       2003|           104345|\n|       2002|            95537|\n|       2001|            88228|\n|       2000|            87290|\n|       2008|            80265|\n|       1999|            80155|\n+-----------+-----------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=62",
+              "$$hashKey": "object:1841"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=63",
+              "$$hashKey": "object:1842"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687228883696_1810700240",
+      "id": "paragraph_1687228883696_1810700240",
+      "dateCreated": "2023-06-20T05:41:23+0300",
+      "dateStarted": "2023-06-21T07:38:23+0300",
+      "dateFinished": "2023-06-21T07:38:26+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:200"
+    },
+    {
+      "text": "%pyspark\n\nscript = '''\n\n\nSELECT Id, Name, var, total_rating\nFROM book \nwhere total_rating > 500\norder by  var desc\n\n\nlimit 10\n\n'''\n\nprint('d) Топ-10 книг имеющих наибольший разброс в оценках среди книг имеющих больше 500 оценок')\n\nspark.sql(script).show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:26+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "d) Топ-10 книг имеющих наибольший разброс в оценках среди книг имеющих больше 500 оценок\n+-------+--------------------+---------+------------+\n|     Id|                Name|      var|total_rating|\n+-------+--------------------+---------+------------+\n|2247237|Scientology: The ...|2.8119636|       853.0|\n| 564449|Scientology: The ...|2.8070145|       838.0|\n|2355709|Para Entrenar a u...|2.7552626|      1656.0|\n| 675331| To Train Up a Child| 2.754059|      1636.0|\n| 214280|Para Entrenar a u...|2.7539046|      1634.0|\n|2175673|The Bluebook: A U...|2.5227597|       542.0|\n|2238150|The Bluebook: A U...|2.5227597|       542.0|\n|4573714|Dianetics: The Mo...|2.4401886|      2897.0|\n|3036308|Dianetics: The Mo...| 2.436395|      2869.0|\n|2724205|Dianetica: La Cie...| 2.434717|      2860.0|\n+-------+--------------------+---------+------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=64",
+              "$$hashKey": "object:1892"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687228984780_721625295",
+      "id": "paragraph_1687228984780_721625295",
+      "dateCreated": "2023-06-20T05:43:04+0300",
+      "dateStarted": "2023-06-21T07:38:26+0300",
+      "dateFinished": "2023-06-21T07:38:36+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:201"
+    },
+    {
+      "text": "%pyspark\n\nscript = '''\n\nselect * \nfrom (\nselect Language, count(Id) as cnt_on_Language\n\nfrom (\n    SELECT *\n    FROM book \n)\ngroup by Language\n) order by cnt_on_Language desc\nlimit 10\n\n'''\n\nprint('е) Любой интересный инсайт из данных: самые популярные языки')\n\nspark.sql(script).show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:36+0300",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "е) Любой интересный инсайт из данных: самые популярные языки\n+--------+---------------+\n|Language|cnt_on_Language|\n+--------+---------------+\n|    null|        1598488|\n|     eng|         180338|\n|   en-US|          21489|\n|     fre|          16327|\n|     ger|          11470|\n|   en-GB|           7767|\n|     spa|           7245|\n|     jpn|           2059|\n|     ita|           1156|\n|     mul|            417|\n+--------+---------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=65",
+              "$$hashKey": "object:1938"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=66",
+              "$$hashKey": "object:1939"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687305572787_1909705770",
+      "id": "paragraph_1687305572787_1909705770",
+      "dateCreated": "2023-06-21T02:59:32+0300",
+      "dateStarted": "2023-06-21T07:38:36+0300",
+      "dateFinished": "2023-06-21T07:38:38+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:202"
+    },
+    {
+      "text": "%md Блок 3. Spark Streaming",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:38+0300",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionKey": "TAB",
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "fontSize": 9,
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<div class=\"markdown-body\">\n<p>Блок 3. Spark Streaming</p>\n\n</div>"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687308504782_377719962",
+      "id": "paragraph_1687308504782_377719962",
+      "dateCreated": "2023-06-21T03:48:24+0300",
+      "dateStarted": "2023-06-21T07:38:38+0300",
+      "dateFinished": "2023-06-21T07:38:38+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:203"
+    },
+    {
+      "text": "%pyspark\n\nfiles_user = glob.glob('/home/kosa98/archive (1)/user*')\n\n\ndf_user = spark.read.csv(files_user[0], escape=\"\\\"\", multiLine=True, header=True, inferSchema=True)\n\nfor file in files_user[1:]:\n    \n    df_current = spark.read.csv(file, escape=\"\\\"\", multiLine=True,header=True, inferSchema=True)\n    df_user = df_user.unionByName(df_current, allowMissingColumns=True)\n    print(file)\n    \n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:38+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "/home/kosa98/archive (1)/user_rating_3000_to_4000.csv\n/home/kosa98/archive (1)/user_rating_4000_to_5000.csv\n/home/kosa98/archive (1)/user_rating_2000_to_3000.csv\n/home/kosa98/archive (1)/user_rating_0_to_1000.csv\n/home/kosa98/archive (1)/user_rating_5000_to_6000.csv\n/home/kosa98/archive (1)/user_rating_6000_to_11000.csv\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=67",
+              "$$hashKey": "object:2029"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=68",
+              "$$hashKey": "object:2030"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=69",
+              "$$hashKey": "object:2031"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=70",
+              "$$hashKey": "object:2032"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=71",
+              "$$hashKey": "object:2033"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=72",
+              "$$hashKey": "object:2034"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=73",
+              "$$hashKey": "object:2035"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=74",
+              "$$hashKey": "object:2036"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=75",
+              "$$hashKey": "object:2037"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=76",
+              "$$hashKey": "object:2038"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=77",
+              "$$hashKey": "object:2039"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=78",
+              "$$hashKey": "object:2040"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=79",
+              "$$hashKey": "object:2041"
+            },
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=80",
+              "$$hashKey": "object:2042"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687308965534_1470445614",
+      "id": "paragraph_1687308965534_1470445614",
+      "dateCreated": "2023-06-21T03:56:05+0300",
+      "dateStarted": "2023-06-21T07:38:38+0300",
+      "dateFinished": "2023-06-21T07:38:40+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:204"
+    },
+    {
+      "text": "%pyspark\n\ndf_user.printSchema()\n\ndf_user.write.parquet('file:///home/kosa98/archive (1)/USER_parquet')\n\n\n#df_user.write.csv('file:///home/kosa98/archive (1)/USER_cvs')\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:44:48+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- ID: integer (nullable = true)\n |-- Name: string (nullable = true)\n |-- Rating: string (nullable = true)\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://192.168.0.15:4040/jobs/job?id=14",
+              "$$hashKey": "object:2856"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687314106330_264180557",
+      "id": "paragraph_1687314106330_264180557",
+      "dateCreated": "2023-06-21T05:21:46+0300",
+      "dateStarted": "2023-06-21T07:44:48+0300",
+      "dateFinished": "2023-06-21T07:44:57+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:205"
+    },
+    {
+      "text": "%pyspark\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:42+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687320959689_982509164",
+      "id": "paragraph_1687320959689_982509164",
+      "dateCreated": "2023-06-21T07:15:59+0300",
+      "dateStarted": "2023-06-21T07:38:42+0300",
+      "dateFinished": "2023-06-21T07:38:42+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:206"
+    },
+    {
+      "text": "%pyspark\n#df_user.where(col('Id') == 4424).show()\n\n#df_temp = spark.read.parquet('/home/kosa98/archive (1)/USER_parquet', header=True).groupby(\"Rating\").agg(Sparkavg(col(\"Id\")))\n#df_temp.show()",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:42+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687320292248_2099913903",
+      "id": "paragraph_1687320292248_2099913903",
+      "dateCreated": "2023-06-21T07:04:52+0300",
+      "dateStarted": "2023-06-21T07:38:42+0300",
+      "dateFinished": "2023-06-21T07:38:42+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:207"
+    },
+    {
+      "text": "%pyspark\n\n\nschema = StructType([StructField(\"ID\", IntegerType(), True), StructField(\"Name\", StringType(), True), StructField(\"Rating\", StringType(), True)])\n\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:38:43+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687314189084_136221721",
+      "id": "paragraph_1687314189084_136221721",
+      "dateCreated": "2023-06-21T05:23:09+0300",
+      "dateStarted": "2023-06-21T07:38:43+0300",
+      "dateFinished": "2023-06-21T07:38:43+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:208"
+    },
+    {
+      "text": "%pyspark\n\n\nstreaming_user = spark.readStream.schema(schema).parquet('file:///home/kosa98/archive (1)/USER_parquet/')#, escape=\"\\\"\", multiLine=True, inferSchema=True)\n\n\ndef convert_to_rating(x):\n    x = {\"it was amazing\": 5,\n        \"really liked it\": 4,\n        \"liked it\": 3,\n        \"it was ok\": 2,\n        \"did not like it\": 1\n    }\n    \n    return small_dict.get(x, 0)\n\n\n\nvar_convert_to_rating = udf(convert_to_rating, IntegerType())\n\nstreaming_user = streaming_user.withColumn('rating', var_convert_to_rating(col(\"Rating\"))) \\\n    .withColumn('timestamp', unix_timestamp(from_unixtime(col('Id') * 100), \"MM/dd/yyyy hh:mm:ss aa\") \\\n    .cast(TimestampType())).withWatermark(\"timestamp\", \"1 minutes\").groupBy(col(\"Name\"), col('timestamp')) \\\n    .agg(Sparkavg(col('rating')).alias('avg_rating')) \n\nquery = streaming_user.writeStream.format(\"parquet\").option(\"checkpointLocation\", \"file:///tmp/vaquarkhan/checkpoint\").option(\"path\", \"file:///home/kosa98/archive (1)/OUT_USER_parquet\").start()\n    \n    \n\n    \n    \nquery.awaitTermination(timeout=6000)\nprint(spark.streams.active)\n\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:44:52+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Fail to execute line 32: query.awaitTermination(timeout=6000)\nTraceback (most recent call last):\n  File \"/tmp/python11673520778326869681/zeppelin_python.py\", line 162, in <module>\n    exec(code, _zcUserQueryNameSpace)\n  File \"<stdin>\", line 32, in <module>\n  File \"/opt/spark/python/pyspark/sql/streaming.py\", line 99, in awaitTermination\n    return self._jsq.awaitTermination(int(timeout * 1000))\n  File \"/opt/spark/python/lib/py4j-0.10.9.5-src.zip/py4j/java_gateway.py\", line 1321, in __call__\n    return_value = get_return_value(\n  File \"/opt/spark/python/pyspark/sql/utils.py\", line 117, in deco\n    raise converted from None\npyspark.sql.utils.StreamingQueryException: Job aborted.\n=== Streaming Query ===\nIdentifier: [id = 6fcd7452-c3fb-42d4-93ab-d68a52f6abc2, runId = 3e1aadc2-a928-4056-b9f6-346c5269fc38]\nCurrent Committed Offsets: {}\nCurrent Available Offsets: {FileStreamSource[file:/home/kosa98/archive (1)/USER_parquet]: {\"logOffset\":0}}\n\nCurrent State: ACTIVE\nThread State: RUNNABLE\n\nLogical Plan:\nAggregate [Name#144, timestamp#154-T60000ms], [Name#144, timestamp#154-T60000ms, avg(rating#150) AS avg_rating#164]\n+- EventTimeWatermark timestamp#154: timestamp, 1 minutes\n   +- Project [ID#143, Name#144, rating#150, cast(unix_timestamp(from_unixtime(cast((Id#143 * 100) as bigint), yyyy-MM-dd HH:mm:ss, Some(Europe/Moscow)), MM/dd/yyyy hh:mm:ss aa, Some(Europe/Moscow), false) as timestamp) AS timestamp#154]\n      +- Project [ID#143, Name#144, convert_to_rating(Rating#145) AS rating#150]\n         +- StreamingExecutionRelation FileStreamSource[file:/home/kosa98/archive (1)/USER_parquet], [ID#143, Name#144, Rating#145]\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687314284290_1194495837",
+      "id": "paragraph_1687314284290_1194495837",
+      "dateCreated": "2023-06-21T05:24:44+0300",
+      "dateStarted": "2023-06-21T07:44:52+0300",
+      "dateFinished": "2023-06-21T07:44:59+0300",
+      "status": "ERROR",
+      "$$hashKey": "object:209"
+    },
+    {
+      "text": "%pyspark\n\nprint(spark.streams.active)\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:28:58+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[]\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": ""
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687318181531_1375016729",
+      "id": "paragraph_1687318181531_1375016729",
+      "dateCreated": "2023-06-21T06:29:41+0300",
+      "dateStarted": "2023-06-21T07:28:58+0300",
+      "dateFinished": "2023-06-21T07:28:58+0300",
+      "status": "FINISHED",
+      "$$hashKey": "object:210"
+    },
+    {
+      "text": "%pyspark\n\n\nUSER_OUT = spark.read.parquet('.home/kosa98/archive (1)/OUT_USER_parquet')\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T07:30:24+0300",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/python",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Fail to execute line 4: USER_OUT = spark.read.parquet('.home/kosa98/archive (1)/OUT_USER_parquet')\nTraceback (most recent call last):\n  File \"/tmp/python6049112249822886171/zeppelin_python.py\", line 167, in <module>\n    exec(code, _zcUserQueryNameSpace)\n  File \"<stdin>\", line 4, in <module>\n  File \"/opt/spark/python/pyspark/sql/readwriter.py\", line 301, in parquet\n    return self._df(self._jreader.parquet(_to_seq(self._spark._sc, paths)))\n  File \"/opt/spark/python/lib/py4j-0.10.9.5-src.zip/py4j/java_gateway.py\", line 1321, in __call__\n    return_value = get_return_value(\n  File \"/opt/spark/python/pyspark/sql/utils.py\", line 117, in deco\n    raise converted from None\npyspark.sql.utils.AnalysisException: Path does not exist: file:/usr/local/zeppelin/bin/.home/kosa98/archive (1)/OUT_USER_parquet\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687316404474_1970512634",
+      "id": "paragraph_1687316404474_1970512634",
+      "dateCreated": "2023-06-21T06:00:04+0300",
+      "dateStarted": "2023-06-21T07:30:24+0300",
+      "dateFinished": "2023-06-21T07:30:24+0300",
+      "status": "ERROR",
+      "$$hashKey": "object:211"
+    },
+    {
+      "text": "%pyspark\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-06-21T06:28:39+0300",
+      "progress": 0,
+      "config": {
+        "colWidth": 12,
+        "fontSize": 9,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1687318119504_669619263",
+      "id": "paragraph_1687318119504_669619263",
+      "dateCreated": "2023-06-21T06:28:39+0300",
+      "status": "READY",
+      "$$hashKey": "object:212"
+    }
+  ],
+  "name": "Untitled Note 2",
+  "id": "2J5VF7ZDW",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.10.1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/Untitled Note 2"
+}
